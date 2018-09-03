@@ -22,6 +22,7 @@ var getMaxElement = function (arr) {
     if (arr[i] > maxElement) {
       maxElement = arr[i];
     }
+
   }
   return maxElement;
 };
@@ -30,19 +31,33 @@ window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_X + CLOUD_Y, CLOUD_Y * 2, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
 
-  //   MAX_BAR      BAR[I]
-  // ----------- = --------
-  //  barHeight       X
+  ctx.font = '16px PT Mono';
+  ctx.fillStyle = 'black';
+  ctx.fillText('Ура Вы победили', 120, 40);
+  ctx.fillText('Список результатов:', 120, 60);
 
-  //  X = (barHeight * BAR[I]) / MAX_BAR
+  var renderText = function (name) {
+    ctx.fillStyle = 'black';
+    ctx.fillText(name[i], CLOUD_X + GAP + (BAR_WIDTH + GAP) * i, CLOUD_HEIGHT - FONT_GAP);
+  };
+
+  var renderRect = function (time) {
+    ctx.fillRect(CLOUD_X + GAP + (BAR_WIDTH + GAP) * i, CLOUD_HEIGHT - TEXT_HEIGHT, BAR_WIDTH, (barHeight * time[i]) / maxTime);
+  };
+
   var maxTime = getMaxElement(times);
 
   for (var i = 0; i < names.length; i++) {
 
-    ctx.font = '16px PT Mono';
-    ctx.fillStyle = 'black';
-    ctx.fillText(names[i], CLOUD_X + GAP + (BAR_WIDTH + GAP) * i, CLOUD_HEIGHT - FONT_GAP);
-    ctx.fillStyle = 'rgb(' + Math.floor(255 - 42.5 * i) + ',' + Math.floor(255 - 42.5 * i) + ',0)';
-    ctx.fillRect(CLOUD_X + GAP + (BAR_WIDTH + GAP) * i, CLOUD_HEIGHT - TEXT_HEIGHT, BAR_WIDTH, (barHeight * times[i]) / maxTime);
+    if (names[i] === 'Вы') {
+      renderText(names);
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+      renderRect(times);
+    } else {
+      renderText(names);
+      ctx.fillStyle = 'rgb(0,0' + ',' + Math.floor(255 - 50.5 * i) + ')';
+      renderRect(times);
+    }
+
   }
 };
