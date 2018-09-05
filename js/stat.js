@@ -12,16 +12,16 @@ var BAR_WIDTH = 40;
 var MAX_BAR_HEIGHT = 150;
 var GAP = 50;
 
-var FONT_GAP = 10;
+var FONT_GAP = 20;
 var TEXT_HEIGHT = 40;
 var TEXT_COLOR = 'black';
-var TEXT_GREETING_X = 120;
-var TEXT_GREETING_Y = 40;
+var TEXT_GREETING_X = 30;
+var TEXT_GREETING_Y = 30;
 var TEXT_GREETING_Y_OFFSET = 20;
 var TEXT_STYLE = '16px PT Mono';
-var TEXT_BAR_X = CLOUD_X + GAP;
-var TEXT_BAR_Y = CLOUD_HEIGHT - FONT_GAP;
-var TEXT_GREETING_ARR = ['Ура вы победили', 'Список результатов:'];
+var TEXT_ONE = 'Ура вы победили!';
+var TEXT_TWO = 'Список результатов:';
+
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
@@ -37,25 +37,17 @@ var getMaxElement = function (arr) {
   return maxElement;
 };
 
+var writeMessage = function (ctx, textMessage, color, font, x, y) {
+  ctx.font = font;
+  ctx.fillStyle = color;
+  ctx.fillText(textMessage, CLOUD_X + x, CLOUD_Y + y);
+};
+
 window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_SHADOW_X, CLOUD_SHADOW_Y, CLOUD_COLOR_SHADOW);
   renderCloud(ctx, CLOUD_X, CLOUD_Y, CLOUD_COLOR);
-
-  var renderText = function (text, multNum, x, y) {
-    ctx.font = TEXT_STYLE;
-    ctx.fillStyle = TEXT_COLOR;
-    ctx.fillText(text, x + (BAR_WIDTH + GAP) * multNum, y);
-  };
-
-  ctx.font = TEXT_STYLE;
-  ctx.fillStyle = TEXT_COLOR;
-
-  for (var k = 0; k < TEXT_GREETING_ARR.length - k; k++) {
-    renderText(TEXT_GREETING_ARR[k], k, TEXT_GREETING_X, TEXT_GREETING_Y);
-    for (var j = k + 1; j < TEXT_GREETING_ARR.length; j++) {
-      renderText(TEXT_GREETING_ARR[j], k, TEXT_GREETING_X, TEXT_GREETING_Y + TEXT_GREETING_Y_OFFSET);
-    }
-  }
+  writeMessage(ctx, TEXT_ONE, TEXT_COLOR, TEXT_STYLE, TEXT_GREETING_X, TEXT_GREETING_Y);
+  writeMessage(ctx, TEXT_TWO, TEXT_COLOR, TEXT_STYLE, TEXT_GREETING_X, TEXT_GREETING_Y + TEXT_GREETING_Y_OFFSET);
 
   var maxTime = getMaxElement(times);
 
@@ -64,6 +56,7 @@ window.renderStatistics = function (ctx, names, times) {
     var rectY = CLOUD_HEIGHT - barHeight;
     var rectX = CLOUD_X + GAP + (BAR_WIDTH + GAP) * multNum;
     ctx.fillRect(rectX, rectY - TEXT_HEIGHT, BAR_WIDTH, barHeight);
+    writeMessage(ctx, names[i], TEXT_COLOR, TEXT_STYLE, GAP + (BAR_WIDTH + GAP) * multNum, CLOUD_HEIGHT - FONT_GAP);
   };
 
   var renderSaturation = function (playerName) {
@@ -73,6 +66,5 @@ window.renderStatistics = function (ctx, names, times) {
   for (var i = 0; i < names.length; i++) {
     renderSaturation(names[i]);
     renderRect(times[i], i);
-    renderText(names[i], i, TEXT_BAR_X, TEXT_BAR_Y);
   }
 };
