@@ -51,20 +51,31 @@ window.renderStatistics = function (ctx, names, times) {
 
   var maxTime = getMaxElement(times);
 
-  var renderRect = function (playerTime, multNum) {
+  var renderRect = function (playerTime, multNum, color) {
     var barHeight = (MAX_BAR_HEIGHT * playerTime) / maxTime;
     var rectY = CLOUD_HEIGHT - barHeight;
     var rectX = CLOUD_X + GAP + (BAR_WIDTH + GAP) * multNum;
+    ctx.fillStyle = color;
     ctx.fillRect(rectX, rectY - TEXT_HEIGHT, BAR_WIDTH, barHeight);
     writeMessage(ctx, names[i], TEXT_COLOR, TEXT_STYLE, GAP + (BAR_WIDTH + GAP) * multNum, CLOUD_HEIGHT - FONT_GAP);
   };
 
-  var renderSaturation = function (playerName) {
-    ctx.fillStyle = (playerName === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 0, 255, ' + (Math.random() + 0.1);
+  var getColor = function () {
+    var color = 'rgba(0, 0, 255, ' + (Math.random() + 0.1);
+    return color;
   };
 
+  // var getColor = function (playerName) {
+  //   ctx.fillStyle = (playerName === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 0, 255, ' + (Math.random() + 0.1);
+  // };
+
   for (var i = 0; i < names.length; i++) {
-    renderSaturation(names[i]);
-    renderRect(times[i], i);
+
+    if (names[i] === 'Вы') {
+      renderRect(times[i], i, 'rgba(255, 0, 0, 1)');
+    } else {
+      renderRect(times[i], i, getColor());
+    }
   }
+
 };
