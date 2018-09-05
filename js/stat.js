@@ -37,10 +37,22 @@ var getMaxElement = function (arr) {
   return maxElement;
 };
 
+var getColor = function (name) {
+  return (name === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 0, 255, ' + (Math.random() + 0.1);
+};
+
 var writeMessage = function (ctx, textMessage, color, font, x, y) {
   ctx.font = font;
   ctx.fillStyle = color;
   ctx.fillText(textMessage, CLOUD_X + x, CLOUD_Y + y);
+};
+
+var renderRect = function (ctx, time, multNum, maxTime, name) {
+  var barHeight = (MAX_BAR_HEIGHT * time) / maxTime;
+  var rectY = CLOUD_HEIGHT - barHeight;
+  var rectX = CLOUD_X + GAP + (BAR_WIDTH + GAP) * multNum;
+  ctx.fillRect(rectX, rectY - TEXT_HEIGHT, BAR_WIDTH, barHeight);
+  writeMessage(ctx, name, TEXT_COLOR, TEXT_STYLE, GAP + (BAR_WIDTH + GAP) * multNum, CLOUD_HEIGHT - FONT_GAP);
 };
 
 window.renderStatistics = function (ctx, names, times) {
@@ -49,22 +61,8 @@ window.renderStatistics = function (ctx, names, times) {
   writeMessage(ctx, TEXT_ONE, TEXT_COLOR, TEXT_STYLE, TEXT_GREETING_X, TEXT_GREETING_Y);
   writeMessage(ctx, TEXT_TWO, TEXT_COLOR, TEXT_STYLE, TEXT_GREETING_X, TEXT_GREETING_Y + TEXT_GREETING_Y_OFFSET);
 
-  var maxTime = getMaxElement(times);
-
-  var renderRect = function (playerTime, multNum) {
-    var barHeight = (MAX_BAR_HEIGHT * playerTime) / maxTime;
-    var rectY = CLOUD_HEIGHT - barHeight;
-    var rectX = CLOUD_X + GAP + (BAR_WIDTH + GAP) * multNum;
-    ctx.fillRect(rectX, rectY - TEXT_HEIGHT, BAR_WIDTH, barHeight);
-    writeMessage(ctx, names[i], TEXT_COLOR, TEXT_STYLE, GAP + (BAR_WIDTH + GAP) * multNum, CLOUD_HEIGHT - FONT_GAP);
-  };
-
-  var getColor = function (name) {
-    return (name === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 0, 255, ' + (Math.random() + 0.1);
-  };
-
   for (var i = 0; i < names.length; i++) {
     ctx.fillStyle = getColor(names[i]);
-    renderRect(times[i], i);
+    renderRect(ctx, times[i], i, getMaxElement(times), names[i]);
   }
 };
