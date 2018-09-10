@@ -71,7 +71,6 @@ var createData = function () {
 };
 
 var renderWizard = function (icons) {
-  debugger;
   for (var i = 0; i < icons.length; i++) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
     var fragment = document.createDocumentFragment();
