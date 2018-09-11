@@ -69,15 +69,13 @@ var createWizard = function (date) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
   wizardElement.querySelector('.setup-similar-label').textContent = date.name;
   wizardElement.querySelector('.wizard-coat').style.fill = date.coatColor;
-  wizardElement.querySelector('.wizard-eyes').style.fill = date.coatEyes;
+  wizardElement.querySelector('.wizard-eyes').style.fill = date.eyesColor;
   return wizardElement;
 };
 
 var renderWizards = function (wizards) {
-  var fragment = document.createDocumentFragment();
   for (var i = 0; i < wizards.length; i++) {
-    fragment.appendChild(createWizard(wizards[i]));
-    sameElements.appendChild(fragment);
+    sameElements.appendChild(createWizard(wizards[i]));
   }
 };
 
