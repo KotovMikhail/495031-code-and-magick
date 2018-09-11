@@ -75,6 +75,7 @@ var createWizard = function (date) {
 
 var renderWizards = function (wizards) {
   for (var i = 0; i < wizards.length; i++) {
+
     sameElements.appendChild(createWizard(wizards[i]));
   }
 };
