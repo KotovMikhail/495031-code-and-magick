@@ -1,6 +1,8 @@
 'use strict';
 
 var WIZARDS_AMOUNT = 4;
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 var NAMES = [
   'Иван',
   'Хуан Себастьян',
@@ -45,6 +47,60 @@ var sameElements = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template')
   .content
   .querySelector('.setup-similar-item');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = setupElement.querySelector('.setup-close');
+var setupUserName = setupElement.querySelector('.setup-user-name');
+
+
+var showPopup = function () {
+  setupOpen.addEventListener('click', function () {
+    openPopup();
+  });
+
+  setupOpen.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      openPopup();
+    }
+  });
+
+  setupClose.addEventListener('click', function () {
+    closePopup();
+  });
+
+  setupClose.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      closePopup();
+    }
+  });
+
+  setupUserName.addEventListener('focus', function () {
+    document.removeEventListener('keydown', onPopupEscPress);
+  });
+
+
+  setupUserName.addEventListener('blur', function () {
+    document.addEventListener('keydown', onPopupEscPress);
+  });
+};
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+// открытие и закрытие попапа
+var openPopup = function () {
+  setupElement.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+
+};
+
+var closePopup = function () {
+  setupElement.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * max + min);
 };
@@ -75,7 +131,6 @@ var createWizard = function (date) {
 
 var renderWizards = function (wizards) {
   for (var i = 0; i < wizards.length; i++) {
-
     sameElements.appendChild(createWizard(wizards[i]));
   }
 };
@@ -83,3 +138,4 @@ var renderWizards = function (wizards) {
 setupSimilarElement.classList.remove('hidden');
 setupElement.classList.remove('hidden');
 renderWizards(createWizardsData());
+showPopup();
